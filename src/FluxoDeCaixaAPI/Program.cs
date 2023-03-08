@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Context;
 using Serilog.Events;
 
+
 using Serilog.Formatting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +54,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllers();
 });
 
+
 // Use Serilog request logging
 app.UseSerilogRequestLogging(options =>
 {
@@ -86,6 +88,8 @@ app.UseSerilogRequestLogging(options =>
         return LogEventLevel.Information;
     };
 });
+
+app.UseMiddleware<MiddlewareExceptionHandler>();
 
 void ConfigureServices(IServiceCollection services)
 {

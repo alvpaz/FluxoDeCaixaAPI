@@ -13,23 +13,35 @@ namespace FluxoDeCaixa.Service.Servicos
             _lancamentosRepositorio = lancamentosRepositorio;
         }
 
-        public async Task AdicionarLancamento(Lancamento lancamento)
+        public async Task<OperationResult<Lancamento>> AdicionarLancamento(Lancamento lancamento)
         {
             if (lancamento == null)
-                throw new ArgumentNullException(nameof(lancamento));
+                return OperationResult<Lancamento>.Fail("O lançamento é nulo");
+
+            if (!lancamento.IsValid())
+                return OperationResult<Lancamento>.Fail("O lançamento é inválido");
 
             await _lancamentosRepositorio.AdicionarLancamento(lancamento);
+
+            return OperationResult<Lancamento>.Ok();
         }
 
-        public async Task<IEnumerable<Lancamento>> ObterLancamentos()
+        public async Task<OperationResult<Lancamento>> ObterLancamentos()
         {
-            return await _lancamentosRepositorio.ObterLancamentos();
+            var lancamentos = await _lancamentosRepositorio.ObterLancamentos();
+
+            return lancamentos == null 
+                ? OperationResult<Lancamento>.Fail("Não foi possível obter os lançamentos") 
+                : OperationResult<Lancamento>.Ok(lancamentos);
         }
 
-        public async Task<decimal> ObterSaldoDiario(string data)
+        public async Task<OperationResult<decimal>> ObterSaldoDiario(string data)
         {
             DateTime.TryParse(data, out var dataLancamento);
             var lancamentos = await _lancamentosRepositorio.ObterLancamentosPorData(dataLancamento);
+
+            if(lancamentos == null)
+                OperationResult<Lancamento>.Fail("Não foi possível obter os lançamentos");
 
             decimal receitas = lancamentos
                 .Where(l => l.Tipo == TipoLancamento.Receita)
@@ -45,7 +57,7 @@ namespace FluxoDeCaixa.Service.Servicos
 
             var saldo = receitas - pagamentos - despesas;
 
-            return saldo;
+            return OperationResult<decimal>.Ok(new[] { saldo }); 
         }
 
     }
