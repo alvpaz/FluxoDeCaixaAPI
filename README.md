@@ -119,4 +119,35 @@ Em seguida, o usuário solicita uma lista de todos os lançamentos que foram adi
 
 Por fim, o usuário solicita o saldo diário consolidado do sistema para uma data específica. O sistema calcula o saldo diário consolidado consultando os lançamentos armazenados no banco de dados e retorna o saldo diário consolidado para o usuário.
 
+
+# Próximas Implementações
+
+Para futuras implementações, planejamos adotar os padrões de arquitetura **Event Sourcing** e **CQRS (Command Query Responsibility Segregation)**. Essas mudanças irão melhorar a escalabilidade e a eficiência do projeto, ao mesmo tempo em que facilitam o desenvolvimento e a manutenção do código.
+
+Event Sourcing é um padrão de arquitetura que armazena o estado de um objeto como uma sequência de eventos. Essa abordagem nos permitirá manter um histórico completo e auditável de todas as mudanças de estado que ocorrem na aplicação. Além disso, o Event Sourcing simplifica a lógica de negócios e facilita a implementação de novos recursos.
+
+CQRS é um padrão que separa as operações de consulta e atualização de um sistema. Essa separação nos permitirá otimizar individualmente o desempenho de leitura e gravação, além de fornecer uma maior flexibilidade na implementação de diferentes modelos de consistência para leitura e gravação.
+
+A implementação desses padrões trará melhorias significativas à arquitetura do FluxoDeCaixa e facilitará o seu crescimento e evolução contínua.
+
+## Sequence Diagram
+
+```seq
+Usuário->Sistema: Adicionar Lançamento
+Sistema->Command Handler: Processar AdicionarLançamentoCommand
+Command Handler->Aggregate Root: Aplicar Evento
+Aggregate Root->Event Store: Armazenar Evento
+Command Handler->Domain Events: Publicar Evento
+Domain Events->Event Handlers: Processar Evento
+Event Handlers->Read Model: Atualizar Read Model
+
+Usuário->Sistema: Obter Lançamentos
+Sistema->Read Model: Consultar Lançamentos
+Read Model->Usuário: Retornar Lançamentos
+
+Usuário->Sistema: Obter Saldo Diário Consolidado
+Sistema->Read Model: Consultar Saldo Diário Consolidado
+Read Model->Usuário: Retornar Saldo Diário Consolidado
+```
+
 ### End
