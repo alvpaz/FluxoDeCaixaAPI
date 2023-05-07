@@ -103,16 +103,8 @@ Pronto! Agora você tem um aplicativo .NET Core 7 executando em um contêiner Do
 
 ## Sequence Diagram
 
-```seq
-Usuário->Sistema: Adicionar Lançamento
-Sistema->Banco de Dados: Armazenar Lançamento
-Usuário->Sistema: Obter Lançamentos
-Sistema->Banco de Dados: Recuperar Lançamentos
-Usuário->Sistema: Obter Saldo Diário Consolidado
-Sistema->Banco de Dados: Calcular Saldo Diário Consolidado
-Sistema->Usuário: Retornar Saldo Diário Consolidado
+![Diagrama de Sequência](diagrama_atual.png)
 
-```
 Este diagrama de sequência descreve a interação entre um usuário e um sistema de Fluxo de Caixa. O processo começa quando o usuário adiciona um novo lançamento de débito ou crédito no sistema. O sistema armazena o lançamento no banco de dados.
 
 Em seguida, o usuário solicita uma lista de todos os lançamentos que foram adicionados ao sistema. O sistema recupera os lançamentos do banco de dados e retorna a lista para o usuário.
