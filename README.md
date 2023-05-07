@@ -132,22 +132,7 @@ A implementação desses padrões trará melhorias significativas à arquitetura
 
 ## Sequence Diagram
 
-```seq
-Usuário->Sistema: Adicionar Lançamento
-Sistema->Command Handler: Processar AdicionarLançamentoCommand
-Command Handler->Aggregate Root: Aplicar Evento
-Aggregate Root->Event Store: Armazenar Evento
-Command Handler->Domain Events: Publicar Evento
-Domain Events->Event Handlers: Processar Evento
-Event Handlers->Read Model: Atualizar Read Model
+![Diagrama de Sequência](diagrama.png)
 
-Usuário->Sistema: Obter Lançamentos
-Sistema->Read Model: Consultar Lançamentos
-Read Model->Usuário: Retornar Lançamentos
-
-Usuário->Sistema: Obter Saldo Diário Consolidado
-Sistema->Read Model: Consultar Saldo Diário Consolidado
-Read Model->Usuário: Retornar Saldo Diário Consolidado
-```
 
 ### End
